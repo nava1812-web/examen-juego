@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  color: white;
+  text-align: center;
+}
+
+.ui {
+  margin-top: 10px;
+}
+
+.game-container {
+  position: relative;
+  width: 400px;
+  margin: auto;
+}
+
+canvas {
+  border-radius: 12px;
+  margin-top: 10px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(5px);
+}
+
+/* Game Over */
+#gameOverScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 600px;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(6px);
+}
+
+.hidden {
+  display: none;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #ff4c4c;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #ff1f1f;
+}
