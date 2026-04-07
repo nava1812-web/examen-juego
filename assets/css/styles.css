@@ -1,45 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #141e30, #243b55);
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: white;
   text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
 
+/* UI */
 .ui {
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
+h1 {
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: #00eaff;
+  text-shadow: 0 0 10px #00eaff;
+}
+
+#score {
+  font-size: 20px;
+  color: #00ff9d;
+}
+
+#highScore {
+  font-size: 16px;
+  color: #ffd700;
+}
+
+/* CONTENEDOR */
 .game-container {
   position: relative;
-  width: 400px;
-  margin: auto;
+  width: 90vw;
+  max-width: 400px;
 }
 
+/* CANVAS RESPONSIVE */
 canvas {
-  border-radius: 12px;
-  margin-top: 10px;
+  width: 100%;
+  height: 70vh;
+  max-height: 600px;
+  border-radius: 15px;
   background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(5px);
+  box-shadow: 
+    0 0 20px rgba(0, 234, 255, 0.3),
+    inset 0 0 20px rgba(255,255,255,0.05);
 }
 
-/* Game Over */
+/* OCULTAR */
+.hidden {
+  display: none !important;
+}
+
+/* GAME OVER */
 #gameOverScreen {
   position: absolute;
   top: 0;
   left: 0;
-  width: 400px;
-  height: 600px;
-  background: rgba(0,0,0,0.7);
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(6px);
-}
-
-.hidden {
-  display: none;
+  backdrop-filter: blur(8px);
 }
 
 button {
@@ -53,5 +86,5 @@ button {
 }
 
 button:hover {
-  background: #ff1f1f;
+  transform: scale(1.1);
 }

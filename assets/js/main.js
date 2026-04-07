@@ -10,10 +10,20 @@ const finalScoreText = document.getElementById("finalScore");
 let blocks, currentBlock, direction, speed, score, gameOver;
 let cameraY = 0;
 
-// High score
+// 🔥 Ajustar canvas dinámicamente
+function resizeCanvas() {
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+}
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+// Record
 let highScore = localStorage.getItem("highScore") || 0;
 highScoreText.textContent = "Record: " + highScore;
 
+// Inicializar juego
 function initGame() {
   blocks = [];
   direction = 1;
@@ -23,10 +33,10 @@ function initGame() {
   cameraY = 0;
 
   blocks.push({
-    x: 150,
-    y: 550,
-    width: 100,
-    height: 20
+    x: canvas.width * 0.3,
+    y: canvas.height - 40,
+    width: canvas.width * 0.4,
+    height: 25
   });
 
   newBlock();
@@ -34,16 +44,20 @@ function initGame() {
   gameOverScreen.classList.add("hidden");
 }
 
+// Nuevo bloque
 function newBlock() {
+  let last = blocks[blocks.length - 1];
+
   currentBlock = {
-    x: 0,
-    y: -20,
-    width: blocks[blocks.length - 1].width,
-    height: 20,
+    x: (canvas.width - last.width) / 2,
+    y: last.y - 25,
+    width: last.width,
+    height: 25,
     falling: false
   };
 }
 
+// Update
 function update() {
   if (gameOver) return;
 
@@ -54,32 +68,38 @@ function update() {
       direction *= -1;
     }
   } else {
-    currentBlock.y += 8; // caída
+    currentBlock.y += 4;
   }
 }
 
+// Draw estilo 2D
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.save();
   ctx.translate(0, cameraY);
 
-  // Bloques
   blocks.forEach(b => {
     ctx.fillStyle = "#00eaff";
     ctx.fillRect(b.x, b.y, b.width, b.height);
 
-    ctx.shadowColor = "#00eaff";
-    ctx.shadowBlur = 10;
+    ctx.fillStyle = "rgba(0,0,0,0.3)";
+    ctx.fillRect(b.x, b.y + b.height - 4, b.width, 4);
+
+    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    ctx.fillRect(b.x, b.y, b.width, 4);
   });
 
-  // Bloque actual
   ctx.fillStyle = "#ff4c4c";
   ctx.fillRect(currentBlock.x, currentBlock.y, currentBlock.width, currentBlock.height);
+
+  ctx.fillStyle = "rgba(255,255,255,0.3)";
+  ctx.fillRect(currentBlock.x, currentBlock.y, currentBlock.width, 4);
 
   ctx.restore();
 }
 
+// Drop
 function dropBlock() {
   if (gameOver) return;
 
@@ -109,15 +129,15 @@ function dropBlock() {
 
     if (score % 3 === 0) speed += 0.5;
 
-    // mover cámara
-    if (blocks.length > 6) {
-      cameraY += 20;
+    if (blocks.length > 5) {
+      cameraY += 25;
     }
 
     newBlock();
   }, 200);
 }
 
+// Game Over
 function endGame() {
   gameOver = true;
 
@@ -131,6 +151,7 @@ function endGame() {
   gameOverScreen.classList.remove("hidden");
 }
 
+// Eventos
 document.addEventListener("keydown", (e) => {
   if (e.code === "Enter") {
     dropBlock();
@@ -139,11 +160,13 @@ document.addEventListener("keydown", (e) => {
 
 retryBtn.addEventListener("click", initGame);
 
+// Loop
 function gameLoop() {
   update();
   draw();
   requestAnimationFrame(gameLoop);
 }
 
+// Start
 initGame();
 gameLoop();
