@@ -5,25 +5,67 @@
   <title>TorreCaos</title>
   <link rel="stylesheet" href="./assets/css/styles.css">
   <link rel="shortcut icon" href="./assets/img/construccion.png" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
 
-<div class="ui">
-  <h1>🏗️ TorreCaos</h1>
-  <p>ENTER = soltar bloque</p>
-  <p id="score">Score: 0</p>
-  <p id="highScore">Record: 0</p>
+<!-- 🔷 NAVBAR -->
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark bg-dark px-3">
+  <span class="navbar-brand">🎮 Torre Caos</span>
+</nav>
+
+<!-- CONTENIDO -->
+<div class="app-container">
+
+  <!-- PANEL -->
+  <aside class="sidebar">
+    <h2>TORRE</h2>
+
+    <div class="panel-box">
+      <p>Score</p>
+      <h3 id="score">0</h3>
+    </div>
+
+    <div class="panel-box">
+      <p>Record</p>
+      <h3 id="highScore">0</h3>
+    </div>
+
+    <div class="panel-box">
+      <p>Progreso</p>
+      <div class="bar">
+        <div id="progress"></div>
+      </div>
+    </div>
+
+    <p class="hint">ENTER / TAP</p>
+  </aside>
+
+  <!-- JUEGO -->
+  <main class="game-container">
+    <canvas id="gameCanvas"></canvas>
+  </main>
+
 </div>
 
-<div class="game-container">
-  <canvas id="gameCanvas"></canvas>
-
-  <div id="gameOverScreen" class="hidden">
-    <h2>💀 GAME OVER</h2>
+<!-- GAME OVER -->
+<div id="gameOverScreen">
+  <div class="game-over-box">
+    <h2>Game Over</h2>
     <p id="finalScore"></p>
-    <button id="retryBtn">RETRY</button>
+    <button id="retryBtn" class="btn btn-danger">RETRY</button>
   </div>
 </div>
+
+<!-- FOOTER -->
+<footer class="footer bg-dark text-center">
+  Eduardo Nava © 2026
+</footer>
 
 <script src="./assets/js/main.js"></script>
 </body>

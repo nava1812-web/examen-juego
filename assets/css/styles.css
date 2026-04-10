@@ -1,90 +1,134 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-
-body {
+/* RESET */
+* {
   margin: 0;
-  font-family: 'Orbitron', sans-serif;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  background: url("../img/fondo.png") center/cover no-repeat fixed;
   color: white;
-  text-align: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* NAVBAR Y FOOTER */
+.navbar,
+.footer {
+  height: clamp(50px, 6vh, 70px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.app-container {
+  flex: 1;
+  display: grid;
+  grid-template-columns: clamp(200px, 25vw, 300px) 1fr;
+  gap: 10px;
+  padding: 10px;
+}
+
+/* SIDEBAR */
+.sidebar {
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 10px;
 
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+  gap: 10px;
 }
 
-/* UI */
-.ui {
-  margin-bottom: 10px;
+/* CAJAS */
+.panel-box {
+  border: 2px solid #00eaff;
+  border-radius: 10px;
+  padding: clamp(8px, 1vw, 15px);
+  text-align: center;
+  box-shadow: 0 0 10px #00eaff;
 }
 
-h1 {
-  font-size: 28px;
-  letter-spacing: 2px;
-  color: #00eaff;
-  text-shadow: 0 0 10px #00eaff;
+/* TEXTO ESCALABLE */
+h2, h3, p {
+  font-size: clamp(12px, 2vw, 18px);
 }
 
-#score {
-  font-size: 20px;
-  color: #00ff9d;
+/* BARRA */
+.bar {
+  height: 8px;
+  background: #fffdfd;
+  border-radius: 5px;
 }
 
-#highScore {
-  font-size: 16px;
-  color: #ffd700;
+.bar div {
+  height: 100%;
+  width: 0%;
+  background: #00eaff;
 }
 
-/* CONTENEDOR */
+/* GAME AREA */
 .game-container {
-  position: relative;
-  width: 90vw;
-  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* CANVAS RESPONSIVE */
+/* 🔥 CANVAS PERFECTO */
 canvas {
   width: 100%;
-  height: 70vh;
-  max-height: 600px;
-  border-radius: 15px;
-  background: rgba(255,255,255,0.05);
-  box-shadow: 
-    0 0 20px rgba(0, 234, 255, 0.3),
-    inset 0 0 20px rgba(255,255,255,0.05);
-}
+  height: 100%;
 
-/* OCULTAR */
-.hidden {
-  display: none !important;
+  max-width: min(90vw, 500px);
+  max-height: calc(100vh - 140px);
+
+  aspect-ratio: 9 / 16;
+
+  border-radius: 20px;
+  border: 2px solid #00eaff;
+
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(5px);
+
+  box-shadow: 0 0 20px #00eaff;
 }
 
 /* GAME OVER */
 #gameOverScreen {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.8);
-  display: flex;
-  flex-direction: column;
+  position: fixed;
+  inset: 0;
+  display: none;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.8);
 }
 
-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background: #ff4c4c;
-  color: white;
-  cursor: pointer;
-  margin-top: 10px;
+#gameOverScreen.active {
+  display: flex;
 }
 
-button:hover {
-  transform: scale(1.1);
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+
+  .app-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .sidebar {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .panel-box {
+    flex: 1;
+  }
+
+  canvas {
+    max-width: 95vw;
+  }
 }

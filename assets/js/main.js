@@ -6,24 +6,30 @@ const highScoreText = document.getElementById("highScore");
 const retryBtn = document.getElementById("retryBtn");
 const gameOverScreen = document.getElementById("gameOverScreen");
 const finalScoreText = document.getElementById("finalScore");
+const progressBar = document.getElementById("progress");
 
 let blocks, currentBlock, direction, speed, score, gameOver;
 let cameraY = 0;
+let scale = 1;
 
-// 🔥 Ajustar canvas dinámicamente
+/* 🔥 RESPONSIVE CANVAS */
 function resizeCanvas() {
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
+  const rect = canvas.getBoundingClientRect();
+
+  canvas.width = rect.width;
+  canvas.height = rect.height;
 }
 
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
-// Record
+/* RECORD */
 let highScore = localStorage.getItem("highScore") || 0;
-highScoreText.textContent = "Record: " + highScore;
+if (highScoreText) {
+  highScoreText.textContent = "Record: " + highScore;
+}
 
-// Inicializar juego
+/* INICIALIZAR */
 function initGame() {
   blocks = [];
   direction = 1;
@@ -40,11 +46,12 @@ function initGame() {
   });
 
   newBlock();
-  scoreText.textContent = "Score: 0";
-  gameOverScreen.classList.add("hidden");
+
+  if (scoreText) scoreText.textContent = "Score: 0";
+  if (gameOverScreen) gameOverScreen.classList.remove("active");
 }
 
-// Nuevo bloque
+/* NUEVO BLOQUE */
 function newBlock() {
   let last = blocks[blocks.length - 1];
 
@@ -57,14 +64,17 @@ function newBlock() {
   };
 }
 
-// Update
+/* UPDATE */
 function update() {
   if (gameOver) return;
 
   if (!currentBlock.falling) {
     currentBlock.x += speed * direction;
 
-    if (currentBlock.x + currentBlock.width > canvas.width || currentBlock.x < 0) {
+    if (
+      currentBlock.x + currentBlock.width > canvas.width ||
+      currentBlock.x < 0
+    ) {
       direction *= -1;
     }
   } else {
@@ -72,13 +82,14 @@ function update() {
   }
 }
 
-// Draw estilo 2D
+/* DRAW */
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.save();
   ctx.translate(0, cameraY);
 
+  /* BLOQUES */
   blocks.forEach(b => {
     ctx.fillStyle = "#00eaff";
     ctx.fillRect(b.x, b.y, b.width, b.height);
@@ -90,16 +101,27 @@ function draw() {
     ctx.fillRect(b.x, b.y, b.width, 4);
   });
 
+  /* BLOQUE ACTUAL */
   ctx.fillStyle = "#ff4c4c";
-  ctx.fillRect(currentBlock.x, currentBlock.y, currentBlock.width, currentBlock.height);
+  ctx.fillRect(
+    currentBlock.x,
+    currentBlock.y,
+    currentBlock.width,
+    currentBlock.height
+  );
 
   ctx.fillStyle = "rgba(255,255,255,0.3)";
-  ctx.fillRect(currentBlock.x, currentBlock.y, currentBlock.width, 4);
+  ctx.fillRect(
+    currentBlock.x,
+    currentBlock.y,
+    currentBlock.width,
+    4
+  );
 
   ctx.restore();
 }
 
-// Drop
+/* DROP */
 function dropBlock() {
   if (gameOver) return;
 
@@ -108,10 +130,12 @@ function dropBlock() {
   setTimeout(() => {
     let last = blocks[blocks.length - 1];
 
-    let overlap = Math.min(
-      currentBlock.x + currentBlock.width,
-      last.x + last.width
-    ) - Math.max(currentBlock.x, last.x);
+    let overlap =
+      Math.min(
+        currentBlock.x + currentBlock.width,
+        last.x + last.width
+      ) -
+      Math.max(currentBlock.x, last.x);
 
     if (overlap <= 0) {
       endGame();
@@ -125,7 +149,12 @@ function dropBlock() {
     blocks.push({ ...currentBlock });
 
     score++;
-    scoreText.textContent = "Score: " + score;
+    if (scoreText) scoreText.textContent = "Score: " + score;
+
+    /* progreso visual */
+    if (progressBar) {
+      progressBar.style.width = Math.min(score * 5, 100) + "%";
+    }
 
     if (score % 3 === 0) speed += 0.5;
 
@@ -137,36 +166,50 @@ function dropBlock() {
   }, 200);
 }
 
-// Game Over
+/* GAME OVER */
 function endGame() {
   gameOver = true;
 
   if (score > highScore) {
     highScore = score;
     localStorage.setItem("highScore", highScore);
-    highScoreText.textContent = "Record: " + highScore;
+    if (highScoreText)
+      highScoreText.textContent = "Record: " + highScore;
   }
 
-  finalScoreText.textContent = "Puntaje: " + score;
-  gameOverScreen.classList.remove("hidden");
+  if (finalScoreText)
+    finalScoreText.textContent = "Puntaje: " + score;
+
+  if (gameOverScreen)
+    gameOverScreen.classList.add("active");
 }
 
-// Eventos
-document.addEventListener("keydown", (e) => {
+/* EVENTOS */
+
+/* teclado */
+document.addEventListener("keydown", e => {
   if (e.code === "Enter") {
     dropBlock();
   }
 });
 
-retryBtn.addEventListener("click", initGame);
+/* 📱 touch (celular) */
+canvas.addEventListener("touchstart", () => {
+  dropBlock();
+});
 
-// Loop
+/* retry */
+if (retryBtn) {
+  retryBtn.addEventListener("click", initGame);
+}
+
+/* LOOP */
 function gameLoop() {
   update();
   draw();
   requestAnimationFrame(gameLoop);
 }
 
-// Start
+/* START */
 initGame();
 gameLoop();
